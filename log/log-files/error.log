@@ -1,0 +1,15 @@
+ [31merror[39m   18:11:43 An Error while trying to connect to databse ==> Error: ER_NOT_SUPPORTED_AUTH_MODE: Client does not support authentication protocol requested by server; consider upgrading MySQL client
+timestamp : 18:13:23 level : [31merror[39m 
+ message: An Error while trying to connect to databse ==> Error: ER_NOT_SUPPORTED_AUTH_MODE: Client does not support authentication protocol requested by server; consider upgrading MySQL client
+timestamp : 18:14:16 
+ level : [31merror[39m 
+ message: An Error while trying to connect to databse ==> Error: ER_NOT_SUPPORTED_AUTH_MODE: Client does not support authentication protocol requested by server; consider upgrading MySQL client
+timestamp : 18:14:33 
+level : [31merror[39m 
+message: An Error while trying to connect to databse ==> Error: ER_NOT_SUPPORTED_AUTH_MODE: Client does not support authentication protocol requested by server; consider upgrading MySQL client
+timestamp : 18:24:09 
+level : [31merror[39m 
+message: An Error while trying to connect to databse ==> Error: ER_BAD_DB_ERROR: Unknown database 'logist_db'
+timestamp : 18:24:41 
+level : [31merror[39m 
+message: Connected
