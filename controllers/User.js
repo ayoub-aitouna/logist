@@ -7,9 +7,6 @@ const { Redis } = require('../database')
 const client = await Redis();
 
 
-
-
-
 const GetUser = (req, res) => {
     const { id: UserID } = req.params;
     const user = await Mysql.query("select * from users where id = ?", [UserID]);

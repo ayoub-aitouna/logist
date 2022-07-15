@@ -5,7 +5,7 @@ const Log = require('./log/index');
 //  routers
 const Auth = require('./routes/Auth');
 const User = require('./routes/Users');
-
+const Viecle = require('./routes/Viecles');
 // middleware
 const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
@@ -18,7 +18,7 @@ app.use('/api/v1/auth', Auth);
 app.use('/api/v1/user', User);
 app.use('/api/v1/order', () => {});
 app.use('/api/v1/review', () => {});
-app.use('/api/v1/viecles', () => {});
+app.use('/api/v1/viecles', Viecle);
 
 
 app.use(notFoundMiddleware);

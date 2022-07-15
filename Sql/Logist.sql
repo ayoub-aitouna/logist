@@ -33,7 +33,7 @@ create TABLE drivers_shipping_method( id INT  NOT NULL AUTO_INCREMENT, shipping_
 
 drop table if EXISTS OrderTable;
 create TABLE OrderTable( id INT  AUTO_INCREMENT, Driver_ID int, user_id int, Date_of_Order DATE, Distination TEXT, location TEXT, Accepted BOOLEAN,
-Canceled BOOLEAN,viecle_Id int,trailer_id INT,Current_Location TEXT, Order_Type enum("Single","multiple shopment","multiple locations") NOT NULL,
+Canceled BOOLEAN,viecle_Id int,trailer_id INT,Current_Location TEXT, Order_Type enum("Single","multiple shopment","multiple locations") NOT NULL,Order_Complited BOOLEAN, 
 Order_Start_Time DATE,FOREIGN KEY(Driver_ID) REFERENCES driver(id),FOREIGN KEY(user_id) REFERENCES user_table(id),FOREIGN KEY(viecle_Id) REFERENCES vehicle_type(id),
 FOREIGN KEY(trailer_id) REFERENCES trailler_types(id), PRIMARY KEY(id));
 
