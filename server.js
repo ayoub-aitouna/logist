@@ -6,6 +6,7 @@ const Log = require('./log/index');
 const Auth = require('./routes/Auth');
 const User = require('./routes/Users');
 const Viecle = require('./routes/Viecles');
+const Order = require('./routes/order');
 // middleware
 const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
@@ -16,7 +17,7 @@ app.use(express.static('./public'));
 
 app.use('/api/v1/auth', Auth);
 app.use('/api/v1/user', User);
-app.use('/api/v1/order', () => {});
+app.use('/api/v1/order', Order);
 app.use('/api/v1/review', () => {});
 app.use('/api/v1/viecles', Viecle);
 

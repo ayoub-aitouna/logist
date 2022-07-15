@@ -36,3 +36,41 @@ message: Connected
 19:47:03 [[32minfo[39m] Connected
 02:43:33 [[32minfo[39m] App Running on port => 8000
 02:43:34 [[32minfo[39m] Connected
+10:21:16 [[32minfo[39m] App Running on port => 8000
+10:21:16 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:16 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:16 [[32minfo[39m] Connected
+10:21:16 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:16 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:16 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:16 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:17 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:17 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:17 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:17 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:17 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:17 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:17 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:17 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:17 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:17 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:18 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:18 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:18 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:18 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:19 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:19 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:19 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:19 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:20 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:20 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:20 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:20 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:21 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:21 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:21 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:21 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:22 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:22 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:22 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:22 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379

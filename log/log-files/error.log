@@ -13,3 +13,39 @@ message: An Error while trying to connect to databse ==> Error: ER_BAD_DB_ERROR:
 timestamp : 18:24:41 
 level : [31merror[39m 
 message: Connected
+10:21:16 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:16 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:16 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:16 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:16 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:16 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:17 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:17 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:17 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:17 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:17 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:17 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:17 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:17 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:17 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:17 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:18 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:18 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:18 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:18 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:19 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:19 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:19 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:19 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:20 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:20 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:20 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:20 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:21 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:21 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:21 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:21 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:22 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:22 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:22 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379
+10:21:22 [[31merror[39m] redis client err => Error: connect ECONNREFUSED 127.0.0.1:6379

@@ -3,7 +3,7 @@ const { BadRequestError } = require('../errors');
 const Log = require('../log');
 
 
-const AddViecle = async(req, res) => {
+const AddReview = async(req, res) => {
     const { vehicle_type_name } = req.body;
     try {
         const vehicle_type = await Mysql("Select * from vehicle_type where vehicle_type_name =? ", [vehicle_type_name]);
@@ -17,7 +17,7 @@ const AddViecle = async(req, res) => {
 
 }
 
-const Viecles = async(req, res) => {
+const Reviews = async(req, res) => {
     try {
         const Viecles = await Mysql("Select * from vehicle_type");
         res.json(Viecles);
@@ -26,4 +26,6 @@ const Viecles = async(req, res) => {
     }
 }
 
-module.exports = { AddViecle, Viecles };
+//const GetMostRiviewd
+
+module.exports = { AddReview, Reviews };

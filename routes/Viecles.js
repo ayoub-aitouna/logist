@@ -1,5 +1,6 @@
-const { Router } = require("express");
+const Router = require("express").Router();
 const { AddViecle, Viecles } = require('../controllers/viecles');
-Router.path('/').post(AddViecle).get(Viecles);
+Router.post('/', AddViecle);
+Router.get('/', Viecles);
 
 module.exports = Router;
