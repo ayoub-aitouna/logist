@@ -12,7 +12,7 @@ const AddViecle = async(req, res) => {
         }
         res.status(200).send("OK");
     } catch (err) {
-        throw BadRequestError(`could not add vehicle by the name => ${vehicle_type_name}`)
+        throw new BadRequestError(`could not add vehicle by the name => ${vehicle_type_name}`)
     }
 
 }
@@ -22,7 +22,7 @@ const Viecles = async(req, res) => {
         const Viecles = await Mysql("Select * from vehicle_type");
         res.json(Viecles);
     } catch (err) {
-        throw BadRequestError('Could not Retrive Your Request');
+        throw new BadRequestError('Could not Retrive Your Request');
     }
 }
 

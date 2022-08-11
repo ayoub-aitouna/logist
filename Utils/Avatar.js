@@ -1,5 +1,5 @@
 const AvatarGenerator = require("named-avatar-generator");
-
+const Log = require('../log/index')
 
 /**
  * 

@@ -1,7 +1,6 @@
-const { Mysql } = require('../database/index.js')
+const { Mysql, Query, SqlQuery } = require('../database/index.js')
 const jwt = require("jsonwebtoken");
-const { Redis } = require('../database/index.js')
-const client = Redis();
+const { client } = require('../database/index.js')
 require('dotenv').config()
 const Log = require('../log')
 const { sendMessage, generateKeyAndstoreOtp } = require('../Utils/OTP')
@@ -11,6 +10,7 @@ const { GenrateAvaratByName } = require('../Utils/Avatar')
 const processFile = require("../middleware/upload");
 const { format } = require("util");
 const { Storage } = require("@google-cloud/storage");
+const { BadRequestError } = require('../errors/index.js');
 // Instantiate a storage client with credentials
 const storage = new Storage({ keyFilename: "google-cloud-key.json" });
 const bucket = storage.bucket("bezkoder-e-commerce");
@@ -19,13 +19,15 @@ const bucket = storage.bucket("bezkoder-e-commerce");
  * @description check if user already has an account if so generate a key and send otp to verify && return {aleady = true } if dosnt return  {aleady = false }
  */
 const CheckIfUserExists = async(req, res) => {
-    const { phonenumber } = req.params;
+    const { phonenumber } = req.body;
+    Log.info(`CheckIfUserExists phonenumber --> ${ phonenumber}`)
     if (!phonenumber) {
+        Log.info(`phonenumber NULL --> ${ phonenumber}`)
         throw new BadRequestError('Please provide phonenumber')
     }
     const Key = await generateKeyAndstoreOtp(phonenumber);
 
-    const user = await Mysql.query("select * from user_table where phone_number = ?", [phonenumber]);
+    const user = Query(`select * from user_table where phone_number = ${phonenumber}`);
     try {
         await sendMessage(Key, phonenumber)
         res.json({ already: !user ? false : true })
@@ -42,7 +44,7 @@ const login = async(req, res) => {
     Log.info(`Verify User by Key ==> ${key}`);
     if (key != null && key != undefined && key == StoredKey) {
         try {
-            const user = await Mysql.query("select * from user_table where phone_number = ?", [phonenumber]);
+            const user = Query(`select * from user_table where phone_number = ${phonenumber}`);
             if (user == false) {
                 res.json({ Verified: true });
             } else {
@@ -59,33 +61,36 @@ const login = async(req, res) => {
         res.json({ Verified: false });
 
     }
-
 }
 
 const VerifyNumber = async(req, res) => {
     const { phonenumber, key } = req.body;
     //get key from redis
     const value = await client.get(phonenumber);
-    res.json({ Verified: (value != null && value != undefined && value == key) });
+    res.send({ Verified: (value != null && value != undefined && value == key) });
 
 }
 
-const regester = async(req, res) => {
-    const { FullName, phoneNumber, adrress } = req.body;
 
-    let avatar_img_path = await GenrateAvaratByName(user.FullName);
+const regester = async(req, res) => {
+    const { FullName, phonenumber, adrress } = req.body;
+
+    let avatar_img_path = await GenrateAvaratByName(FullName);
     if (!avatar_img_path) throw new UnauthenticatedError('Failled To Generate Profile Avatar')
 
-    const UserCreated = await Mysql.query(
-        `insert into user_table(avatar,full_name,phone_number,gender,birth_date,adrress,email,created_date)values(?,?,?,?,?,?,?,CURRENT_DATE());` [
-            avatar_img_path, FullName, phoneNumber, gender, birthDate, adrress, email
-        ]);
-    if (!UserCreated) throw UnauthenticatedError('User Could not be Created')
-
+    const UserCreated = SqlQuery(`insert into user_table(avatar,full_name,phone_number,gender,birth_date,adrress,email,created_date)
+                                values('${avatar_img_path}','${FullName}','${phonenumber}','N/A',CURRENT_DATE(),'${adrress}',"",CURRENT_DATE());`);
+    if (!UserCreated.success) throw new BadRequestError("Could not Create User");
     const accesToken = jwt.sign(req.body, process.env.ACCESS_TOKEN_SECRET);
     const RefreshToken = jwt.sign(req.body, process.env.REFRESH_TOKEN_SECRET);
 
     res.json({ accesToken: accesToken, RefreshToken: RefreshToken });
+}
+
+
+const test = (req, res) => {
+    const accesToken = jwt.sign({ id: 1 }, process.env.ACCESS_TOKEN_SECRET);
+    return res.json({ accesToken: accesToken });
 }
 
 const driverRegester = async(req, res) => {
@@ -104,23 +109,20 @@ const driverRegester = async(req, res) => {
         vehicle_type_id
     } = req.body;
 
-    let avatar_img_path = await GenrateAvaratByName(user.FullName);
+    let avatar_img_path = await GenrateAvaratByName(FullName);
     if (!avatar_img_path) throw new UnauthenticatedError('Failled To Generate Profile Avatar')
 
-    const UserCreated = await Mysql.query(
-        `insert into user_table(avatar,full_name,phone_number,gender,birth_date,adrress,email,created_date)values(?,?,?,?,?,?,?,CURRENT_DATE());` [
-            avatar_img_path, FullName, phoneNumber, gender, birthDate, adrress, email
-        ]);
+    const UserCreated = SqlQuery(`insert into user_table(avatar,full_name,phone_number,gender,birth_date,adrress,email,created_date)
+                            values("${avatar_img_path}","${FullName}","${phoneNumber}","male",CURRENT_DATE(),"${adrress}","",CURRENT_DATE())`);
+    if (!UserCreated.success) throw new BadRequestError("Could not Create User");
+    const DriverCreated = SqlQuery(`INSERT INTO driver(user_id ,nationality ,identity_card ,license ,vehicle_register_number, plate_number, identity_card_photo_front, identity_card_photo_back, lecense_photo, vehicle_type_id) 
+                                        VALUES("${UserCreated.data.rows.insertId}","${nationality}","${identity_card}","${license}","${vehicle_register_number}","${plate_number}","${identity_card_photo_front}",
+                                        "${identity_card_photo_back}","${lecense_photo}","${vehicle_type_id}");`);
+    if (!DriverCreated.success) throw new BadRequestError("Could not Create User");
 
-    if (!UserCreated) throw UnauthenticatedError('User Could not be Created');
-
-    const DriverCreated = Mysql.query(`INSERT INTO driver(user_id ,nationality ,identity_card ,license ,vehicle_register_number, plate_number, identity_card_photo_front, identity_card_photo_back, lecense_photo, vehicle_type_id) 
-                                        VALUES(?,?,?,?,?,?,?,?,?,?);`, [UserCreated[0].id, nationality, identity_card, license, vehicle_register_number, plate_number, identity_card_photo_front, identity_card_photo_back, lecense_photo, vehicle_type_id]);
-
-    if (!DriverCreated) throw UnauthenticatedError('Driver Could not be Created');
-
-    const accesToken = jwt.sign(DriverCreated[0], process.env.ACCESS_TOKEN_SECRET);
-    const RefreshToken = jwt.sign(DriverCreated[0], process.env.REFRESH_TOKEN_SECRET);
+    const Driver = SqlQuery(`Select * from driver where id = ${DriverCreated.data.rows.insertId}`);
+    const accesToken = jwt.sign(Driver.data.rows[0], process.env.ACCESS_TOKEN_SECRET);
+    const RefreshToken = jwt.sign(Driver.data.rows[0], process.env.REFRESH_TOKEN_SECRET);
 
     res.json({ accesToken: accesToken, RefreshToken: RefreshToken });
 }
@@ -206,5 +208,6 @@ module.exports = {
     regester,
     ResendOTP,
     UploadDocument,
+    test,
     driverRegester
 }

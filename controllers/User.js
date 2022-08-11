@@ -1,47 +1,54 @@
-const { Mysql } = require('../database/index.js')
+const { Mysql, Query } = require('../database/index.js')
 const Log = require('../log')
 const { sendMessage, generateKeyAndstoreOtp } = require('../Utils/OTP')
 const { BadRequestError, UnauthenticatedError } = require('../errors')
 const { GetUserById } = require('../Utils/user')
-const { Redis } = require('../database')
-const client = Redis();
+const { client } = require('../database')
 
 
 const GetUser = async(req, res) => {
-    const { id: UserID } = req.params;
-    const user = await Mysql.query("select * from users where id = ?", [UserID]);
+    const { id: UserId } = req.user;
+    const user = Query("select * from user_table where id = " + UserId);
     if (!user) return res.status(404).send("User not found");
-    res.status(200).send(user);
+    if (user.length === 0) {
+        return res.status(200).send({
+            id: 0,
+            full_name: "",
+            phone_number: ""
+        });
+    }
+    res.status(200).send(JSON.stringify(user[0]));
 
 }
 const GetUsers = async(req, res) => {
-    const user = await Mysql.query("select * from users where");
-    if (!user) return res.status(404).send("Empty");
-    res.status(200).send(user);
-
+    const users = Query(`select * from user_table`);
+    res.status(200).send(users);
 }
 
 const UpdateUser = async(req, res) => {
-    const { id: UserID } = req.user;
-
-    const user = await GetUserById(UserID);
-    const updateRes = await Mysql.query("update users set full_name =? , adrress=?,email=?", [user.full_name, user.adress, user.email]);
-    if (!updateRes) return res.status(404).send("User not found");
+    const { id: UserId } = req.user;
+    const user = await GetUserById(UserId);
+    const updateRes = Query(`update user_table set full_name =${user.full_name} , adrress=${user.adress} ,email=${user.email}`);
     res.sendStatus(200)
 }
 
 const UpdatePhoneNumber = async(req, res) => {
-    const { phonenumber, Otp: inputOtp } = req.body;
-    const Otp = await client.get(phonenumber);
-    if (inputOtp !== Otp) throw new UnauthenticatedError('Entred otp not valide')
-
-    const user = await Mysql.query("update users set phone_number=?", [phonenumber]);
+    const { phonenumber, Otp } = req.body;
+    const Stored_Otp = await client.get(phonenumber);
+    if (Stored_Otp !== Otp) throw new BadRequestError('Entred otp not valide')
+    const user = Query(`update user_table set phone_number = ${phonenumber}`);
     res.status(200).send(user);
 }
+
 const SendOtp = async(req, res) => {
-    const { id: UserID } = req.user;
-    const user = await GetUserById(UserID);
-    sendMessage(user.phone_number)
+    const { id } = req.user;
+    const user = await GetUserById(id);
+    try {
+        sendMessage(generateKeyAndstoreOtp(user.phone_number), user.phone_number);
+        res.sendStatus(200);
+    } catch (err) {
+        throw new BadRequestError(err);
+    }
 }
 
-module.exports = { GetUser, GetUsers, UpdateUser, UpdatePhoneNumber }
+module.exports = { GetUser, GetUsers, UpdateUser, UpdatePhoneNumber, SendOtp }

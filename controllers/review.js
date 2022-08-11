@@ -4,28 +4,25 @@ const Log = require('../log');
 
 
 const AddReview = async(req, res) => {
-    const { vehicle_type_name } = req.body;
+    const { id: UserId } = req.user;
+    const { id: DriverId, Rating } = req.body;
     try {
-        const vehicle_type = await Mysql("Select * from vehicle_type where vehicle_type_name =? ", [vehicle_type_name]);
-        if (!vehicle_type) {
-            const Added = await Mysql("Insert into vehicle_type(vehicle_type_name)values ")
-        }
+        const Review = await Mysql(`INSERT into Reviews(driver_id , user_id , Rating, review_date)VALUES(?,?,?,CURDATE());`, [DriverId, UserId, Rating]);
         res.status(200).send("OK");
     } catch (err) {
-        throw BadRequestError(`could not add vehicle by the name => ${vehicle_type_name}`)
+        throw new BadRequestError(`could not add vehicle by the name => ${vehicle_type_name}`)
     }
 
 }
 
 const Reviews = async(req, res) => {
+    const { id: DriverId } = req.body;
     try {
-        const Viecles = await Mysql("Select * from vehicle_type");
-        res.json(Viecles);
+        const Review = await Mysql("Select * from Reviews where driver_id = ?", [DriverId]);
+        res.json(Review);
     } catch (err) {
-        throw BadRequestError('Could not Retrive Your Request');
+        throw new BadRequestError('Could not Retrive Your Request');
     }
 }
-
-//const GetMostRiviewd
 
 module.exports = { AddReview, Reviews };

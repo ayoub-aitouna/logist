@@ -1,18 +1,27 @@
-const createClient = require('redis');
+const redis = require('redis');
 const Log = require('../log')
-    // const client = createClient.createClient({
-    //     url: 'redis://:p3f20e7666f09aa032b22841127ec39fe73a5dbaac6d3911342bfe37b95421bc6@ec2-54-78-213-175.eu-west-1.compute.amazonaws.com:17649'
-    // });
-
-
-const ConnectRedis = async() => {
-    const client = createClient.createClient();
-    try {
-        client.on('error', (err) => Log.error(`redis client err => ${err}`));
-        return await client.connect();
-    } catch (err) {
-        Log.error(`redis client err => ${err}`)
+const client = redis.createClient();
+client.on('connect', function(err) {
+    if (err) {
+        Log.error("Error occured while connecting to redis server")
+    } else {
+        Log.info('connected to Redis!!');
     }
-}
+});
+client.on('error', function(err) {
+    if (err) {
+        Log.error(err);
+    }
+});
 
-module.exports = ConnectRedis;
+async function disconnectRedis() {
+    await new Promise((resolve, reject) => {
+        client.quit(() => {
+            resolve();
+        });
+    });
+}
+module.exports = {
+    client,
+    disconnectRedis
+};

@@ -6,16 +6,18 @@ const {
     VerifyNumber,
     regester,
     ResendOTP,
-    driverRegester,
-    UploadDocument
+    UploadDocument,
+    test,
+    driverRegester
 } = require('../controllers/Auth');
 
-router.post('/', login);
-router.post('/regester', regester);
-router.get('/:phonenumber', CheckIfUserExists);
+router.get('/CheckIfUserExists', CheckIfUserExists);
 router.get('/VerifyNumber', VerifyNumber);
+router.post('/', login);
+router.post('/test', test);
+router.post('/regester', regester);
 router.post('/Verify', ResendOTP);
-router.get('/driverRegester', driverRegester);
+router.post('/driverRegester', driverRegester);
 router.post('/UploadDocument', UploadDocument);
 
 module.exports = router;

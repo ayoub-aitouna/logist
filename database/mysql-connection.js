@@ -1,20 +1,40 @@
 var mysql = require("mysql");
 const Log = require('../log')
-var connection = mysql.createConnection({
+var syncSql = require('sync-sql');
+const { BadRequestError } = require("../errors");
+
+const connect = {
     user: "root",
     host: "127.0.0.1",
     password: "password",
     database: "logist",
-    // port: 25060,
+    port: 3306,
     multipleStatements: true
-});
+}
+var Mysql = mysql.createConnection(connect);
 
 
-connection.connect(function(err) {
+Mysql.connect(function(err) {
     if (err) {
         Log.error(`An Error while trying to connect to databse ==> ${err}`)
         throw err;
     }
-    Log.info(`Connected`)
+    Log.info(`SQL DB Connected`)
 });
-module.exports = connection;
+
+function Query(query) {
+    try {
+        return syncSql.mysql(connect, query).data.rows;
+    } catch (err) {
+        throw new BadRequestError(err);
+    }
+}
+
+function SqlQuery(query) {
+    try {
+        return syncSql.mysql(connect, query);
+    } catch (err) {
+        throw new BadRequestError(err);
+    }
+}
+module.exports = { Mysql, Query, SqlQuery };

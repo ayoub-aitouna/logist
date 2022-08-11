@@ -1,6 +1,12 @@
-const Mysql = require('./mysql-connection');
-const Redis = require('./redis-connection')
+const { Mysql, Query, SqlQuery } = require('./mysql-connection');
+const {
+    client,
+    disconnectRedis
+} = require('./redis-connection')
 module.exports = {
     Mysql,
-    Redis
+    client,
+    disconnectRedis,
+    Query,
+    SqlQuery
 }
