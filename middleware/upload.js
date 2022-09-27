@@ -1,6 +1,5 @@
 const util = require("util");
 const Multer = require("multer");
-// max file siz 2m
 const maxSize = 2 * 1024 * 1024;
 
 let processFile = Multer({
@@ -9,6 +8,4 @@ let processFile = Multer({
 }).single("file");
 
 let processFileMiddleware = util.promisify(processFile);
-
-
 module.exports = processFileMiddleware;

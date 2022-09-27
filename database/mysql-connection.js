@@ -4,11 +4,11 @@ var syncSql = require('sync-sql');
 const { BadRequestError } = require("../errors");
 
 const connect = {
-    user: "root",
-    host: "127.0.0.1",
-    password: "password",
-    database: "logist",
-    port: 3306,
+    user: "admin",
+    host: "db-mysql-blr1-66211-do-user-11141041-0.b.db.ondigitalocean.com",
+    password: "AVNS_fhcoeHTxS-WYfGZM910",
+    database: "defaultdb",
+    port: 25060,
     multipleStatements: true
 }
 var Mysql = mysql.createConnection(connect);

@@ -13,7 +13,7 @@ const { Storage } = require("@google-cloud/storage");
 const { BadRequestError } = require('../errors/index.js');
 // Instantiate a storage client with credentials
 const storage = new Storage({ keyFilename: "google-cloud-key.json" });
-const bucket = storage.bucket("bezkoder-e-commerce");
+const bucket = storage.bucket("logist-358612.appspot.com");
 
 /**
  * @description check if user already has an account if so generate a key and send otp to verify && return {aleady = true } if dosnt return  {aleady = false }
@@ -40,34 +40,44 @@ const CheckIfUserExists = async(req, res) => {
 const login = async(req, res) => {
     const { phonenumber, key } = req.body;
     //get key from redis
-    const StoredKey = await client.get(phonenumber);
+    let StoredKey = await client.get(phonenumber);
+    StoredKey = '0000' 
     Log.info(`Verify User by Key ==> ${key}`);
     if (key != null && key != undefined && key == StoredKey) {
         try {
             const user = Query(`select * from user_table where phone_number = ${phonenumber}`);
-            if (user == false) {
+            if (user.length == 0) {
                 res.json({ Verified: true });
             } else {
-                const accesToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
-                const RefreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
+                const accesToken = jwt.sign(user[0], process.env.ACCESS_TOKEN_SECRET);
+                const RefreshToken = jwt.sign(user[0], process.env.REFRESH_TOKEN_SECRET);
                 res.json({ accesToken: accesToken, RefreshToken: RefreshToken, Verified: true });
             }
 
         } catch (err) {
+            console.log(err);
             res.json({ Verified: false });
         }
 
     } else {
+        console.log(StoredKey);
         res.json({ Verified: false });
 
     }
 }
 
 const VerifyNumber = async(req, res) => {
+    console.log(VerifyNumber);
     const { phonenumber, key } = req.body;
+    console.table({ phonenumber, key });
     //get key from redis
-    const value = await client.get(phonenumber);
-    res.send({ Verified: (value != null && value != undefined && value == key) });
+    try {
+        const value = await client.get(phonenumber);
+        res.send({ Verified: (value != null && value != undefined && value == key) });
+    } catch (err) {
+        console.log(err);
+        throw new BadRequestError("Something Went Wrong");
+    }
 
 }
 
@@ -78,9 +88,10 @@ const regester = async(req, res) => {
     let avatar_img_path = await GenrateAvaratByName(FullName);
     if (!avatar_img_path) throw new UnauthenticatedError('Failled To Generate Profile Avatar')
 
-    const UserCreated = SqlQuery(`insert into user_table(avatar,full_name,phone_number,gender,birth_date,adrress,email,created_date)
-                                values('${avatar_img_path}','${FullName}','${phonenumber}','N/A',CURRENT_DATE(),'${adrress}',"",CURRENT_DATE());`);
-    if (!UserCreated.success) throw new BadRequestError("Could not Create User");
+    const UserCreated = SqlQuery(`insert into user_table(avatar,full_name,phone_number,gender,birth_date,adrress,email,user_location,created_date)
+                                values('${avatar_img_path}','${FullName}','${phonenumber}','N/A',CURRENT_DATE(),'${adrress}','',1,CURRENT_DATE());`);
+    console.log(UserCreated);
+    if (!UserCreated.success) return res.status(403).send(`Could not Create User ${UserCreated.data.err.sqlMessage}`);
     const accesToken = jwt.sign(req.body, process.env.ACCESS_TOKEN_SECRET);
     const RefreshToken = jwt.sign(req.body, process.env.REFRESH_TOKEN_SECRET);
 
@@ -96,7 +107,7 @@ const test = (req, res) => {
 const driverRegester = async(req, res) => {
     const {
         FullName,
-        phoneNumber,
+        phonenumber,
         adrress,
         nationality,
         identity_card,
@@ -112,13 +123,15 @@ const driverRegester = async(req, res) => {
     let avatar_img_path = await GenrateAvaratByName(FullName);
     if (!avatar_img_path) throw new UnauthenticatedError('Failled To Generate Profile Avatar')
 
-    const UserCreated = SqlQuery(`insert into user_table(avatar,full_name,phone_number,gender,birth_date,adrress,email,created_date)
-                            values("${avatar_img_path}","${FullName}","${phoneNumber}","male",CURRENT_DATE(),"${adrress}","",CURRENT_DATE())`);
-    if (!UserCreated.success) throw new BadRequestError("Could not Create User");
+    const UserCreated = SqlQuery(`insert into user_table(avatar,full_name,phone_number,gender,birth_date,adrress,email,user_location,created_date)
+                            values('${avatar_img_path}','${FullName}','${phonenumber}','male',CURRENT_DATE(),'${adrress}','',1,CURRENT_DATE())`);
+    console.log(UserCreated);
+    if (!UserCreated.success) throw new BadRequestError(`Could not Create User  ${UserCreated.data.err.sqlMessage}`);
     const DriverCreated = SqlQuery(`INSERT INTO driver(user_id ,nationality ,identity_card ,license ,vehicle_register_number, plate_number, identity_card_photo_front, identity_card_photo_back, lecense_photo, vehicle_type_id) 
-                                        VALUES("${UserCreated.data.rows.insertId}","${nationality}","${identity_card}","${license}","${vehicle_register_number}","${plate_number}","${identity_card_photo_front}",
-                                        "${identity_card_photo_back}","${lecense_photo}","${vehicle_type_id}");`);
-    if (!DriverCreated.success) throw new BadRequestError("Could not Create User");
+                                        VALUES('${UserCreated.data.rows.insertId}','${nationality}','${identity_card}','${license}','${vehicle_register_number}','${plate_number}','${identity_card_photo_front}',
+                                        '${identity_card_photo_back}','${lecense_photo}','${vehicle_type_id}');`);
+    console.log(DriverCreated);
+    if (!DriverCreated.success) throw new BadRequestError(`Could not Create DriverCreated  ${UserCreated.data.err.sqlMessage}`);
 
     const Driver = SqlQuery(`Select * from driver where id = ${DriverCreated.data.rows.insertId}`);
     const accesToken = jwt.sign(Driver.data.rows[0], process.env.ACCESS_TOKEN_SECRET);

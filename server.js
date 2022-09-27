@@ -7,8 +7,11 @@ const http = require("http");
 const server = http.createServer(app);
 const socketio = require("socket.io")(server);
 
+require('express-async-errors');
+// const Socket = require('./Socket');
 // socket configuration
-const WebSockets = require("./utils/WebSockets.js");
+const Sockets = require("./utils/WebSockets.js");
+const WebSockets =  new Sockets(socketio);
 
 //  routers
 const Auth = require('./routes/Auth');
@@ -16,6 +19,7 @@ const User = require('./routes/Users');
 const Viecle = require('./routes/Viecles');
 const Order = require('./routes/order');
 const review = require('./routes/review');
+const Files = require('./routes/Files');
 
 // middleware
 const notFoundMiddleware = require('./middleware/not-found');
@@ -31,6 +35,7 @@ app.use('/api/v1/user', authenticationMiddleware, User);
 app.use('/api/v1/order', authenticationMiddleware, Order);
 app.use('/api/v1/review', authenticationMiddleware, review);
 app.use('/api/v1/viecles', Viecle);
+app.use('/api/v1/files', Files);
 
 
 app.use(notFoundMiddleware);
@@ -41,13 +46,15 @@ const PORT = process.env.PORT || 8000;
 
 
 /** Create socket connection */
-let app_server;
-global.io = socketio.listen(server);
-global.io.on('connection', WebSockets.connection);
+let appServer;
+socketio.listen(server);
+socketio.on('connection', WebSockets.connection);
+socketio.of("/Order").on('connection', WebSockets.OrderConnection);
+socketio.of("/Chat").on('connection', WebSockets.ChatConnection);
 
 const start = () => {
     try {
-        app_server = app.listen(PORT, () => {
+        appServer = server.listen(PORT, () => {
             Log.info(`App Running on port => ${PORT}`)
         })
     } catch (error) {
@@ -57,4 +64,4 @@ const start = () => {
 
 
 start();
-module.exports = app_server;
+module.exports = appServer;

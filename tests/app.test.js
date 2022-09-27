@@ -117,7 +117,6 @@ describe('Auth API', () => {
     });
 });
 
-
 describe('USERS API', () => {
     it("GET / --> specific User by id", () => {
         return request(app)
@@ -166,7 +165,6 @@ describe('USERS API', () => {
 
 
 });
-
 
 describe('Order API', () => {
     it("POST / --> Order", () => {

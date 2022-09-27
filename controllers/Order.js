@@ -16,11 +16,18 @@ const Order = async(req, res) => {
         Order_Start_Time
     } = req.body;
     try {
-        const order = SqlQuery(`INSERT INTO ordertable(Driver_ID,user_id,Date_of_Order,Distination,location,
+        const Distinationid = Query(`INSERT INTO location(latitude,longitude)values(${Distination.lant},${Distination.long});`).insertId;
+        const locationid = Query(`INSERT INTO location(latitude,longitude)values(${location.lant},${location.long});`).insertId;
+        const Current_Locationid = Query(`INSERT INTO location(latitude,longitude)values(${Current_Location.lant},${Current_Location.long});`).insertId;
+        const order = SqlQuery(`INSERT INTO OrderTable(Driver_ID,user_id,Date_of_Order,Distination,location,
             Accepted,Canceled,viecle_Id,trailer_id,Current_Location,Order_Type,Order_Complited,Order_Start_Time) 
-            VALUES(${Driver_ID},${UserId},'${Date_of_Order}','${Distination}','${location}',0,0,${viecle_Id},${trailer_id},'${Current_Location}',
+            VALUES(${Driver_ID},${UserId},'${Date_of_Order}','${Distinationid}','${locationid}',0,0,${viecle_Id},${trailer_id},'${Current_Locationid}',
             '${Order_Type}',0,'${Order_Start_Time}');`);
-        if (!order.success) throw new BadRequestError("Could not Place The order");
+
+        if (!order.success) {
+            console.log(order);
+            return res.status(400).send(`Could not Place The order  ${updated.data.err.sqlMessage}`);
+        }
         res.status(200).send({ id: order.data.rows.insertId });
     } catch (err) {
         throw new BadRequestError(err);
@@ -30,11 +37,17 @@ const Order = async(req, res) => {
 const AcceptOrder = async(req, res) => {
     const { id } = req.body;
     try {
-        const updated = SqlQuery(`update ordertable set Accepted = true where id = ${id}`);
-        if (!updated.success) throw new BadRequestError("Could not CancelOrder The order");
+        const updated = SqlQuery(`
+                        update OrderTable set Accepted = true where id = $ { id }
+                        `);
+        if (!updated.success) throw new BadRequestError(`
+                        Could not CancelOrder The order $ { updated.data.err.sqlMessage }
+                        `);
         res.status(200).send("OK");
     } catch (err) {
-        throw new BadRequestError("could not Accept The Order");
+        throw new BadRequestError(`
+                        could not Accept The Order $ { err }
+                        `);
     }
 
 }
@@ -42,19 +55,40 @@ const AcceptOrder = async(req, res) => {
 const CancelOrder = async(req, res) => {
     const { id } = req.body;
     try {
-        const updated = SqlQuery(`update ordertable set Canceled = true where id = ${id}`);
-        if (!updated.success) throw new BadRequestError("Could not CancelOrder The order");
+        const updated = SqlQuery(`
+                        update OrderTable set Canceled = true where id = $ { id }
+                        `);
+        if (!updated.success) throw new BadRequestError(`
+                        Could not CancelOrder The order $ { updated.data.err.sqlMessage }
+                        `);
         res.status(200).send("OK");
     } catch (err) {
         throw new BadRequestError("could not Accept The Order");
     }
 }
 
+const OrderStatus = async(req, res) => {
+    const { id } = req.body;
+    try {
+        const orderStatus = Query(`
+                        select * from OrderTable where id = $ { id }
+                        `);
+        if (orderStatus.length == 0) return res.sendStatus(404);
+        res.send(orderStatus[0]);
+    } catch (err) {
+        throw new BadRequestError("Order Not Found");
+    }
+}
+
 const CompleteOrder = async(req, res) => {
     const { id } = req.body;
     try {
-        const updated = SqlQuery(`update ordertable set Order_Complited = true where id = ${id}`);
-        if (!updated.success) throw new BadRequestError("Could not CompleteOrder The order");
+        const updated = SqlQuery(`
+                        update OrderTable set Order_Complited = true where id = $ { id }
+                        `);
+        if (!updated.success) throw new BadRequestError(`
+                        Could not CompleteOrder The order $ { updated.data.err.sqlMessage }
+                        `);
         res.status(200).send("OK");
     } catch (err) {
         throw new BadRequestError("could not Accept The Order");
@@ -64,9 +98,17 @@ const CompleteOrder = async(req, res) => {
 const UpdateLocation = async(req, res) => {
     const { location, id } = req.body;
     try {
-        const updated = SqlQuery(`update ordertable set location = "${location}" where id = ${id}`);
+        const locationid = Query(`
+                        INSERT INTO location(latitude, longitude) values($ { location.lant }, $ { location.long });
+                        `).insertId;
+        const updated = SqlQuery(`
+                        update OrderTable set location = '${locationid}'
+                        where id = $ { id }
+                        `);
         console.log(updated);
-        if (!updated.success) throw new BadRequestError("Could not UpdateLocation The order");
+        if (!updated.success) throw new BadRequestError(`
+                        Could not UpdateLocation The order $ { updated.data.err.sqlMessage }
+                        `);
         res.status(200).send("OK");
     } catch (err) {
         throw new BadRequestError(err);
@@ -75,10 +117,12 @@ const UpdateLocation = async(req, res) => {
 
 const DriversToDeliver = async(req, res) => {
     const { lan, lon, Range } = req.body;
-    let SelectedDrivers;
+    let SelectedDrivers = [];
 
     try {
-        const drivers = Query(`SELECT * from driver INNER JOIN user_table ON user_table.id = driver.user_id INNER JOIN user_location on user_table.id = user_location.user_id`);
+        const drivers = Query(`
+                        SELECT * from driver INNER JOIN user_table ON user_table.id = driver.user_id INNER JOIN location on location.id = user_table.user_location `);
+        if (!drivers.success) throw new BadRequestError("could not get DriversToDeliver ");
         drivers.map((items) => {
             if (distanceInKmBetweenEarthCoordinates(items.latitude, items.longitude, lan, lon) <= Range) {
                 SelectedDrivers.push(items);
@@ -87,7 +131,7 @@ const DriversToDeliver = async(req, res) => {
         SelectedDrivers.sort((a, b) => (a.Rating > b.Rating) ? 1 : -1);
         res.status(200).json(SelectedDrivers);
     } catch (err) {
-        throw new BadRequestError("could not Accept The Order");
+        throw new BadRequestError("could not get DriversToDeliver ");
     }
 }
 
@@ -123,4 +167,4 @@ function distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
     return earthRadiusKm * c;
 }
 
-module.exports = { Order, AcceptOrder, CancelOrder, CompleteOrder, UpdateLocation, DriversToDeliver };
+module.exports = { Order, AcceptOrder, CancelOrder, CompleteOrder, UpdateLocation, DriversToDeliver, OrderStatus };

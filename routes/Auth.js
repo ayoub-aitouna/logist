@@ -11,8 +11,8 @@ const {
     driverRegester
 } = require('../controllers/Auth');
 
-router.get('/CheckIfUserExists', CheckIfUserExists);
-router.get('/VerifyNumber', VerifyNumber);
+router.post('/CheckIfUserExists', CheckIfUserExists);
+router.post('/VerifyNumber', VerifyNumber);
 router.post('/', login);
 router.post('/test', test);
 router.post('/regester', regester);

@@ -10,6 +10,7 @@ const { client } = require('../database');
  * @returns 
  */
 function sendMessage(key, number) {
+    Log.info(key);
     /* 
      * send Key to given number using twilio api 
      */
@@ -17,7 +18,7 @@ function sendMessage(key, number) {
         twilioClient.messages.create({
             from: process.env.TWILIO_PHONE_NUMBER,
             to: number,
-            body: `${key} : فليكسي رمز تأكيد الهوية`
+            body: ` رمز التحقق من تسجيل الدخول الخاص بك هو ${key} :`
         }, function(err, message) {
             if (err) {
                 Log.error(err);
@@ -37,7 +38,7 @@ function sendMessage(key, number) {
  */
 async function generateKeyAndstoreOtp(PhoneNumber) {
     // generate randome 6 degit key 
-    const key = Math.floor(Math.random() * 900000) + 100000;
+    const key = Math.floor(Math.random() * 9000) + 1000;
     // store in redis cash
     await client.set(PhoneNumber, key);
     //return the stored key 

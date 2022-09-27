@@ -342,3 +342,19 @@ message: Connected
 16:58:13 [[31merror[39m] connect ECONNREFUSED 127.0.0.1:6379
 16:58:14 [[31merror[39m] connect ECONNREFUSED 127.0.0.1:6379
 16:59:04 [[31merror[39m] The From phone number +19896234080 is not a valid, SMS-capable inbound phone number or short code for your account.
+20:31:30 [[31merror[39m] connect ECONNREFUSED 127.0.0.1:6379
+20:31:30 [[31merror[39m] connect ECONNREFUSED 127.0.0.1:6379
+20:31:31 [[31merror[39m] connect ECONNREFUSED 127.0.0.1:6379
+20:31:31 [[31merror[39m] connect ECONNREFUSED 127.0.0.1:6379
+20:31:31 [[31merror[39m] connect ECONNREFUSED 127.0.0.1:6379
+20:31:31 [[31merror[39m] connect ECONNREFUSED 127.0.0.1:6379
+20:31:31 [[31merror[39m] connect ECONNREFUSED 127.0.0.1:6379
+20:31:32 [[31merror[39m] connect ECONNREFUSED 127.0.0.1:6379
+20:31:32 [[31merror[39m] connect ECONNREFUSED 127.0.0.1:6379
+20:31:32 [[31merror[39m] connect ECONNREFUSED 127.0.0.1:6379
+20:31:33 [[31merror[39m] connect ECONNREFUSED 127.0.0.1:6379
+21:29:59 [[31merror[39m] An Error while trying to connect to databse ==> Error: ER_NOT_SUPPORTED_AUTH_MODE: Client does not support authentication protocol requested by server; consider upgrading MySQL client
+13:25:48 [[31merror[39m] read ECONNRESET
+17:03:49 [[31merror[39m] read ECONNRESET
+20:03:48 [[31merror[39m] The From phone number +19896234080 is not a valid, SMS-capable inbound phone number or short code for your account.
+20:04:19 [[31merror[39m] The From phone number +19896234080 is not a valid, SMS-capable inbound phone number or short code for your account.
