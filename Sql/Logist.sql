@@ -1,15 +1,6 @@
 use defaultdb;
 
 -- ------------------------------------tables------------------------------------
-DROP table IF EXISTS location;
-
-create table location(
-    id int NOT NULL AUTO_INCREMENT,
-    latitude FLOAT,
-    longitude FLOAT,
-    PRIMARY KEY(id)
-);
-
 DROP table IF EXISTS user_table;
 
 create table user_table(
@@ -21,20 +12,30 @@ create table user_table(
     birth_date date NOT NULL,
     adrress text,
     email text,
-    user_location int,
     created_date date NOT NULL,
-    FOREIGN KEY(user_location) REFERENCES location(id),
     PRIMARY KEY (id),
     UNIQUE (phone_number)
+);
+
+DROP table IF EXISTS location;
+
+create table location(
+    id int NOT NULL AUTO_INCREMENT,
+    latitude FLOAT,
+    longitude FLOAT,
+    user_id int,
+    PRIMARY KEY(id),
+    FOREIGN KEY(user_id) REFERENCES user_table(id)
 );
 
 drop table if EXISTS trailler_types;
 
 create table trailler_types(
     id int NOT NULL AUTO_INCREMENT,
-    _name text,
+    _name VARCHAR(30),
     _desc text,
     _pic text,
+    UNIQUE KEY (_name),
     PRIMARY KEY(id)
 );
 
@@ -42,9 +43,10 @@ drop table if EXISTS trailler;
 
 create table trailler(
     id int NOT NULL AUTO_INCREMENT,
-    _name text,
+    _name VARCHAR(30),
     _desc text,
     _pic text,
+    UNIQUE KEY (_name),
     PRIMARY KEY(id)
 );
 
@@ -52,9 +54,10 @@ drop table if EXISTS vehicle;
 
 create TABLE vehicle(
     id int NOT NULL AUTO_INCREMENT,
-    _name text,
+    _name VARCHAR(30),
     _desc text,
     _pic text,
+    UNIQUE KEY (_name),
     PRIMARY KEY(id)
 );
 
@@ -72,6 +75,7 @@ create table driver(
     identity_card_photo_back text,
     lecense_photo text,
     vehicle_id int,
+    approved BOOLEAN DEFAULT false,
     FOREIGN KEY (user_id) REFERENCES user_table(id),
     FOREIGN KEY (vehicle_id) REFERENCES vehicle(id),
     PRIMARY KEY(id)
@@ -157,6 +161,29 @@ CREATE TABLE Reviews(
     PRIMARY KEY(id)
 );
 
+Drop Table if EXISTS balance;
+
+CREATE TABLE balance(
+    id int not null AUTO_INCREMENT,
+    user_id int,
+    amount DECIMAL(13, 4),
+    FOREIGN KEY(user_id) REFERENCES user_table(id),
+    PRIMARY KEY(id)
+);
+
+Drop Table if EXISTS balance_transactions;
+
+CREATE TABLE balance_transactions(
+    id int not null AUTO_INCREMENT,
+    user_id int,
+    balance_id int,
+    amount FLOAT,
+    transactions_type TEXT,
+    FOREIGN KEY(user_id) REFERENCES user_table(id),
+    FOREIGN KEY(balance_id) REFERENCES balance(id),
+    PRIMARY KEY(id)
+);
+
 DROP TABLE IF EXISTS inbox;
 
 CREATE TABLE inbox (
@@ -195,6 +222,38 @@ CREATE TABLE message (
 );
 
 --------------------------------------------------------------------------------
+-- ---------------Drop All Tables----------------------------
+DROP TABLE IF EXISTS message;
+
+DROP TABLE IF EXISTS inbox;
+
+Drop Table if EXISTS balance_transactions;
+
+Drop Table if EXISTS balance;
+
+DROP TABLE if EXISTS Reviews;
+
+DROP TABLE if EXISTS Ticket;
+
+drop table if EXISTS OrderTable;
+
+drop table if EXISTS drivers_trailler;
+
+drop table if EXISTS drivers_trailler_type;
+
+DROP table IF EXISTS driver;
+
+drop table if EXISTS vehicle;
+
+drop table if EXISTS trailler;
+
+drop table if EXISTS trailler_types;
+
+DROP table IF EXISTS user_table;
+
+DROP table IF EXISTS location;
+
+-- ---------------Drop All Tables----------------------------
 DELIMITER;
 
 ;

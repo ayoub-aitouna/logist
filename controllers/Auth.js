@@ -89,14 +89,13 @@ const VerifyNumber = async (req, res) => {
 const regester = async (req, res) => {
 	const { FullName, phonenumber, adrress } = req.body;
 
-	let avatar_img_path = await GenrateAvaratByName(FullName);
-	if (!avatar_img_path)
+	let avatar_img_url = await GenrateAvaratByName(FullName);
+	if (!avatar_img_url)
 		throw new UnauthenticatedError("Failled To Generate Profile Avatar");
-
 	const UserCreated =
-		SqlQuery(`insert into user_table(avatar,full_name,phone_number,gender,birth_date,adrress,email,user_location,created_date)
-                                values('${avatar_img_path}','${FullName}','${phonenumber}','N/A',CURRENT_DATE(),'${adrress}','',1,CURRENT_DATE());`);
-	console.log(UserCreated);
+		SqlQuery(`insert into user_table(avatar,full_name,phone_number,gender,birth_date,
+			adrress,email,user_location,created_date) values ('${avatar_img_url}',
+			'${FullName}','${phonenumber}','N/A',CURRENT_DATE(),'${adrress}','Example@email.com',CURRENT_DATE());`);
 	if (!UserCreated.success)
 		return res
 			.status(403)
@@ -131,13 +130,13 @@ const driverRegester = async (req, res) => {
 		TrailerTypeIds,
 	} = req.body;
 
-	let avatar_img_path = await GenrateAvaratByName(FullName);
-	if (!avatar_img_path)
+	let avatar_img_url = await GenrateAvaratByName(FullName);
+	if (!avatar_img_url)
 		throw new UnauthenticatedError("Failled To Generate Profile Avatar");
 
 	const UserCreated =
 		SqlQuery(`insert into user_table(avatar,full_name,phone_number,gender,birth_date,adrress,email,user_location,created_date)
-                            values('${avatar_img_path}','${FullName}','${phonenumber}','male',CURRENT_DATE(),'${adrress}','',1,CURRENT_DATE())`);
+                            values('${avatar_img_url}','${FullName}','${phonenumber}','male',CURRENT_DATE(),'${adrress}','',1,CURRENT_DATE())`);
 
 	if (!UserCreated.success)
 		throw new BadRequestError(

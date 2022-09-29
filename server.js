@@ -38,6 +38,7 @@ app.use("/api/v1/review", authenticationMiddleware, review);
 app.use("/api/v1/messenger", authenticationMiddleware, Messenger);
 app.use("/api/v1/files", authenticationMiddleware, Files);
 app.use("/api/v1/viecles", authenticationMiddleware, Viecle);
+app.use("/api/v1/Statics", authenticationMiddleware, Viecle);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);

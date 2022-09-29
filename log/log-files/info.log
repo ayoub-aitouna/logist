@@ -1546,3 +1546,6 @@ message: Connected
 04:17:12 [[32minfo[39m] App Running on port => 8000
 04:17:13 [[32minfo[39m] connected to Redis!!
 04:17:20 [[31merror[39m] An Error while trying to connect to databse ==> Error: connect ETIMEDOUT
+15:44:14 [[32minfo[39m] App Running on port => 8000
+15:44:14 [[32minfo[39m] SQL DB Connected
+15:44:14 [[32minfo[39m] connected to Redis!!

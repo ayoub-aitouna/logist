@@ -55,7 +55,7 @@ const Chat = (req, res) => {
 	const SenderId = req.query.SenderId;
 	const receiverId = req.query.receiverId;
 	let Query =
-		Hash_id == null || Hash_id == "undefined" || Hash_id == ""
+		Hash_id == null || Hash_id == undefined || Hash_id == ""
 			? `select id ,DATE_FORMAT(sendTime, '%H:%i') as sendTime , DATE_FORMAT(readTime, '%H:%i') as readTime ,
 					contentImage,contentText,contentAudio,SenderId,Delete_id,Hash_id,message.CallsDuration 
 					from message where Hash_id= ${Hash_id};`
@@ -78,12 +78,12 @@ const Read = (req, res) => {
 
 const Send = (req, res) => {
 	let Hash_id =
-		req.body.Hash_id == null || req.body.Hash_id == "undefined"
+		req.body.Hash_id == null || req.body.Hash_id == undefined
 			? ""
 			: req.body.Hash_id;
 
 	let CallDuration =
-		req.body.CallsDuration == null || req.body.CallsDuration == "undefined"
+		req.body.CallsDuration == null || req.body.CallsDuration == undefined
 			? 0
 			: req.body.CallsDuration;
 
