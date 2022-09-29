@@ -7,7 +7,6 @@ const {
 	AddTrailerType,
 	AddTrailers,
 } = require("../controllers/viecles");
-
 Router.post("/", AddViecle);
 Router.get("/", Viecles);
 Router.post("/AddTrailer", AddTrailers);

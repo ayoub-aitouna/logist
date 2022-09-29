@@ -1,12 +1,9 @@
-const Router = require('express').Router();
-const { Order, AcceptOrder, CancelOrder, CompleteOrder, UpdateLocation, DriversToDeliver, OrderStatus } = require('../controllers/Order');
+const Router = require("express").Router();
+const { ChatRoms, Chat, Read, Send } = require("../controllers/Messenger");
 
-Router.post('/', Order);
-Router.post('/AcceptOrder', AcceptOrder);
-Router.post('/CancelOrder', CancelOrder);
-Router.post('/CompleteOrder', CompleteOrder);
-Router.post('/UpdateLocation', UpdateLocation);
-Router.get('/GetOrderStatus', OrderStatus);
-Router.get('/DriversToDeliver', DriversToDeliver);
+Router.get("/inbox", ChatRoms);
+Router.get("/Chat", Chat);
+Router.post("/Read", Read);
+Router.post("/Send", Send);
 
 module.exports = Router;

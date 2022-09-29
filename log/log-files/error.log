@@ -358,3 +358,6 @@ message: Connected
 17:03:49 [[31merror[39m] read ECONNRESET
 20:03:48 [[31merror[39m] The From phone number +19896234080 is not a valid, SMS-capable inbound phone number or short code for your account.
 20:04:19 [[31merror[39m] The From phone number +19896234080 is not a valid, SMS-capable inbound phone number or short code for your account.
+01:10:16 [[31merror[39m] read ECONNRESET
+03:11:03 [[31merror[39m] read ECONNRESET
+04:17:20 [[31merror[39m] An Error while trying to connect to databse ==> Error: connect ETIMEDOUT
