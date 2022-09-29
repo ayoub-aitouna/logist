@@ -54,19 +54,16 @@ const Chat = (req, res) => {
 	const Hash_id = req.query.Hash_id;
 	const SenderId = req.query.SenderId;
 	const receiverId = req.query.receiverId;
-	let msg;
-	if (Hash_id == null || Hash_id == "undefined" || Hash_id == "") {
-		msg =
-			SqlQuery(`select message.id , DATE_FORMAT(message.sendTime, '%H:%i') as sendTime , DATE_FORMAT(message.readTime, '%H:%i') as readTime 
+	let Query =
+		Hash_id == null || Hash_id == "undefined" || Hash_id == ""
+			? `select id ,DATE_FORMAT(sendTime, '%H:%i') as sendTime , DATE_FORMAT(readTime, '%H:%i') as readTime ,
+					contentImage,contentText,contentAudio,SenderId,Delete_id,Hash_id,message.CallsDuration 
+					from message where Hash_id= ${Hash_id};`
+			: `select message.id , DATE_FORMAT(message.sendTime, '%H:%i') as sendTime , DATE_FORMAT(message.readTime, '%H:%i') as readTime 
 					,message.contentImage,message.contentText,message.contentAudio,message.SenderId,message.Delete_id,message.Hash_id 
 					,message.CallsDuration from message inner join inbox on message.Hash_id=inbox.Hash
-						where (user_id = ${SenderId} or receiverId = ${SenderId}) and (user_id = ${receiverId} or receiverId = ${receiverId})`);
-	} else {
-		msg =
-			SqlQuery(`select id ,DATE_FORMAT(sendTime, '%H:%i') as sendTime , DATE_FORMAT(readTime, '%H:%i') as readTime ,
-					contentImage,contentText,contentAudio,SenderId,Delete_id,Hash_id,message.CallsDuration 
-					from message where Hash_id= ${Hash_id};`);
-	}
+						where (user_id = ${SenderId} or receiverId = ${SenderId}) and (user_id = ${receiverId} or receiverId = ${receiverId})`;
+	let msg = SqlQuery(Query);
 	if (!msg.success) throw new BadRequestError("Error");
 	res.send(msg.data.rows);
 };

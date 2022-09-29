@@ -1,17 +1,8 @@
 const Router = require("express").Router();
-const {
-	AddViecle,
-	Viecles,
-	Trailers,
-	TrailerType,
-	AddTrailerType,
-	AddTrailers,
-} = require("../controllers/viecles");
-Router.post("/", AddViecle);
-Router.get("/", Viecles);
-Router.post("/AddTrailer", AddTrailers);
-Router.get("/Trailers", Trailers);
-Router.post("/AddTrailerType", AddTrailerType);
-Router.get("/TrailerTypes", TrailerType);
+const { ChatRoms, Chat, Read, Send } = require("../controllers/Messenger");
+Router.get("/inbox", ChatRoms);
+Router.get("/Conversation", Chat);
+Router.post("/Read_message", Read);
+Router.post("/Send_message", Send);
 
 module.exports = Router;
