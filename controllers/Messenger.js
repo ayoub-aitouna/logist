@@ -4,7 +4,8 @@ const { BadRequestError } = require("../errors");
 const getRoomInfo = (id) => {
 	return new Promise((resolve, rejects) => {
 		const Room = SqlQuery(
-			`select name,profileImage ,isAvailable from user where idUser = ${id}`
+			`select full_name , avatar from user_table
+			 where id = ${id}`
 		);
 		if (!Room.success) {
 			rejects("Could Not Retrive the Room");
@@ -31,9 +32,8 @@ const LoopAllRoms = async (Roms, id) => {
 			seen: Rom.seen,
 			unseenNumber: Rom.unseenNumber,
 			Hash: Rom.Hash,
-			name: item.name,
-			profileImage: item.profileImage,
-			isAvailable: item.isAvailable,
+			name: item.full_name,
+			profileImage: item.avatar,
 		});
 	}
 	return Roms_info;

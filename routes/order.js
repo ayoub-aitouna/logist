@@ -1,9 +1,20 @@
 const Router = require("express").Router();
-const { ChatRoms, Chat, Read, Send } = require("../controllers/Messenger");
-
-Router.get("/inbox", ChatRoms);
-Router.get("/Chat", Chat);
-Router.post("/Read", Read);
-Router.post("/Send", Send);
+const {
+	Order,
+	AcceptOrder,
+	CancelOrder,
+	CompleteOrder,
+	UpdateLocation,
+	DriversToDeliver,
+	OrderStatus,
+} = require("../controllers/Order");
+co;
+Router.post("/", Order);
+Router.post("/AcceptOrder", AcceptOrder);
+Router.post("/CancelOrder", CancelOrder);
+Router.post("/CompleteOrder", CompleteOrder);
+Router.post("/UpdateLocation", UpdateLocation);
+Router.get("/GetOrderStatus", OrderStatus);
+Router.get("/DriversToDeliver", DriversToDeliver);
 
 module.exports = Router;

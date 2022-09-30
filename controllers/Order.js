@@ -79,12 +79,21 @@ const CancelOrder = async (req, res) => {
 
 const OrderStatus = async (req, res) => {
 	const { id } = req.body;
+	let OrderObj;
 	try {
 		const orderStatus = Query(`
-                        select * from OrderTable where id = $ { id }
+                        select * from OrderTable where id = ${id}
                         `);
 		if (orderStatus.length == 0) return res.sendStatus(404);
-		res.send(orderStatus[0]);
+		OrderObj = orderStatus[0];
+		OrderObj["Status"] = OrderObj.Order_Complited
+			? "Delivered"
+			: OrderObj.Accepted
+			? "Accepted"
+			: OrderObj.Canceled
+			? "Canceled"
+			: "Pending";
+		res.send(OrderObj);
 	} catch (err) {
 		throw new BadRequestError("Order Not Found");
 	}
@@ -94,11 +103,11 @@ const CompleteOrder = async (req, res) => {
 	const { id } = req.body;
 	try {
 		const updated = SqlQuery(`
-                        update OrderTable set Order_Complited = true where id = $ { id }
+                        update OrderTable set Order_Complited = true where id = ${id}
                         `);
 		if (!updated.success)
 			throw new BadRequestError(`
-                        Could not CompleteOrder The order $ { updated.data.err.sqlMessage }
+                        Could not CompleteOrder The order ${updated.data.err.sqlMessage}
                         `);
 		res.status(200).send("OK");
 	} catch (err) {
@@ -110,7 +119,7 @@ const UpdateLocation = async (req, res) => {
 	const { location, id } = req.body;
 	try {
 		const locationid = Query(`
-                        INSERT INTO location(latitude, longitude) values($ { location.lant }, $ { location.long });
+                        INSERT INTO location(latitude, longitude) values(${location.lant}, ${location.long});
                         `).insertId;
 		const updated = SqlQuery(`
                         update OrderTable set location = '${locationid}'
@@ -119,7 +128,7 @@ const UpdateLocation = async (req, res) => {
 		console.log(updated);
 		if (!updated.success)
 			throw new BadRequestError(`
-                        Could not UpdateLocation The order $ { updated.data.err.sqlMessage }
+                        Could not UpdateLocation The order ${updated.data.err.sqlMessage}
                         `);
 		res.status(200).send("OK");
 	} catch (err) {
