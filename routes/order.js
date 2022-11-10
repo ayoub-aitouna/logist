@@ -8,7 +8,6 @@ const {
 	DriversToDeliver,
 	OrderStatus,
 } = require("../controllers/Order");
-co;
 Router.post("/", Order);
 Router.post("/AcceptOrder", AcceptOrder);
 Router.post("/CancelOrder", CancelOrder);
